@@ -1,8 +1,10 @@
-.grid-container {
+.container
+{
   display: flex;
+  text-align: center;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  min-height: 100vh; }
-
-/*# sourceMappingURL=style.css.map */
+  min-height: 70vh;
+  margin: 20px;
+  padding: 20px;
+}

@@ -1,8 +1,13 @@
 
-.grid-container {
-    display: flex;
+.flex-container {
+    display: grid;
     justify-content: center;
     align-items: center;
     text-align: center;
     min-height: 100vh;
+}
+
+#input {
+    width: 1000px;
+    height: 100px;
 }
