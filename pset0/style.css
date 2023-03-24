@@ -1,10 +1,21 @@
 .container
 {
   display: flex;
-  text-align: center;
   justify-content: center;
   align-items: center;
-  min-height: 70vh;
-  margin: 20px;
-  padding: 20px;
+  height: 50px;
+  margin: 10px;
+  padding: 10px;
+}
+
+.img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 800px;
+}
+
+#google-logo {
+  height: 130px;
+  width: auto;
 }
