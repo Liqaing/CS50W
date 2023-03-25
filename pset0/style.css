@@ -1,11 +1,10 @@
-.container
+/* .container
 {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 50px;
-  margin: 10px;
-  padding: 10px;
+  
 }
 
 .img-container {
@@ -13,9 +12,48 @@
   justify-content: center;
   align-items: center;
   height: 800px;
+  margin: 10px;
+  padding: 10px;
 }
 
 #google-logo {
   height: 130px;
   width: auto;
+} */
+
+.container {
+  text-align: center;
+  margin-top: 30vh;
+  margin-bottom:20px;
+  padding: 10px;
+}
+
+#google-logo {
+  width: 300px;
+  height: auto;
+}
+
+#search-bar {
+  min-width: 380px;
+  height: 10px;
+  padding: 10px;
+  margin: 20px;
+}
+#search-bar[type=text]:focus {
+  background-color: rgb(221, 247, 255);
+}
+
+.link-container {
+  text-align: right;
+}
+.link {
+  color: #000000;
+  padding: 5px;
+  font-size: 15px;
+}
+.link:link, :visited, :active {
+  text-decoration: none;
+}
+.link:hover {
+  text-decoration: underline;
 }
