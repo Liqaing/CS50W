@@ -33,14 +33,31 @@
   height: auto;
 }
 
+/* for mobile */
+@media (max-width: 520px) {
+  /* for screen smaller than 520px */
+  #google-logo {
+    width: 250px;
+  }
+}
+
+/* make input box shrink when window size small, with flex contianer, add justify content to make elemenet senter horizontally */
+.input-container {
+  display: flex;
+  justify-content: center;
+}
+
 #search-bar {
-  min-width: 380px;
+  /* min-width: 380px; */
+  width: 500px;
   height: 10px;
-  padding: 10px;
+  padding: 12px;
   margin: 20px;
+  /* border-radius make edge of the box (input feild) curve  */
+  border-radius: 10px; 
 }
 #search-bar[type=text]:focus {
-  background-color: rgb(221, 247, 255);
+  background-color: rgb(233, 233, 233);
 }
 
 .link-container {
@@ -56,4 +73,13 @@
 }
 .link:hover {
   text-decoration: underline;
+}
+
+.button {
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 10px;
+  text-align: center;
+  width: 120px;
+  display: inline-block;
 }

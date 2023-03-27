@@ -25,11 +25,17 @@
         <div class="container">
             <img src="google-logo.png" alt="Google Logo" id="google-logo">
             <form action="https://www.google.com/search">
-    
-                <input type="text" name="q" autofocus id="search-bar">
-                <br>              
-                <input type="submit" value="Google Search">
-         
+                <!-- search bar -->
+                <div class="input-container">
+                    <input type="text" name="q" autofocus id="search-bar">
+                </div>
+                <!-- line break -->
+                <br>
+                <!-- google search and im feeling lucky button -->
+                <input type="submit" value="Google Search" class="button">
+                <a href="https://www.google.com/search?btnI=1&q=%s site:developer.mozilla.org">
+                    <input type="button" value="I'm feeling lucky" class="button">
+                </a>
             </form>
         </div>
 
