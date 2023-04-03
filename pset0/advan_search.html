@@ -6,30 +6,43 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <nav>
+            <div class="link-container">
+                <a href="image_search.html" class="link">Image Search</a>
+                <a href="index.html" class="link">Google Search</a>
+            </div>
+        </nav>
         <div id="advance-search-container">
             <h2 class="title">Advanced Search</h2>
             <div class="bottom-line"></div>
             
             <div id="form-container">
-                <h2 class="sub-title">Find pages with...</h2>
-                <div>
-                    <form action="https://www.google.com/advanced_search">
-                        <label>all these words: </label>
-                        <input type="text" name="as_q">
-                        <br>
-                        <label>this exact word or phrase: </label>
-                        <input type="text" name="as_epq">
-                        <br>
-                        <label>any of these words: </label>
-                        <input type="text" name="as_oq">
-                        <br>
-                        <label>none of these words: </label>
-                        <input type="text" name="as_eq">
-                        <br>
-                        <input type="submit" value="Advanced Search">
-                    </form>
-                </div>
+                <form action="https://www.google.com/advanced_search">
 
+                    <div id="sub-title-container">
+                        <label class="sub-title">Find pages with...</label>
+                        <span id="label-spacing"></span>
+                        <label class="sub-title">To do this in the search box.</label>
+                    </div>
+
+                    <label>all these words: </label>
+                    <input type="text" name="as_q" class="advance-search-input">
+                    <br>
+
+                    <label>this exact word or phrase: </label>
+                    <input type="text" name="as_epq" class="advance-search-input">
+                    <br>
+
+                    <label>any of these words: </label>
+                    <input type="text" name="as_oq" class="advance-search-input">
+                    <br>
+
+                    <label>none of these words: </label>
+                    <input type="text" name="as_eq" class="advance-search-input">
+                    <br>
+
+                    <input type="submit" value="Advanced Search">
+                </form>
             </div>
         </div>
     </body>
