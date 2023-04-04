@@ -114,8 +114,6 @@
 }
 
 .advance-search-input {
-  height: 20px;
-  flex: 0 0 200px;
   margin-right: 20px;
   margin-bottom: 5px;
 }
@@ -131,13 +129,7 @@
 }
 
 .advance-search-label {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  text-align: right;
-  width: 450px;
-  line-height: 26px;
-  margin-bottom: 10px;
+
 }
 
 
