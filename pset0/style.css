@@ -116,17 +116,25 @@
 
 .front-label-container {
   display: inline-block;
-  width: 190px;
+  width: 220px;
 }
 
-
-.label-spacing {
-  display: inline-block;
-  width: 20px;
-  white-space: nowrap;
-}
 
 #form-element-container {
   margin: 20px;
   padding: 20px;
+}
+
+.advance-search-input {
+  width: 500px;
+  height: 23px;
+  margin-right: 10px;
+}
+
+.advance-search-form-element-container {
+  margin-bottom: 25px;
+}
+
+.advance-search-button {
+  
 }
