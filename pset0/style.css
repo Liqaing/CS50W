@@ -110,7 +110,7 @@
 
 .sub-title {
   font-weight: 500;
-  font-size: 18px;
+  font-size: 17px;
 }
 
 
@@ -136,5 +136,24 @@
 }
 
 .advance-search-button {
-  
+  text-align: center;
+  width: 130px;
+  height: 30px;
+  background-color: #0047ab;
+  color: #FFFFFF;
+  text-decoration: none;
+  border: 2px solid #0047ab;
+}
+
+.advance-search-button {
+  transition-duration: 0.2s;
+}
+
+.advance-search-button:hover {
+  background-color: #808080;
+}
+
+.advance-search-button-container {
+  width: 730px;
+  text-align: right;
 }
