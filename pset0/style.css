@@ -113,6 +113,11 @@
   font-size: 17px;
 }
 
+.sub-title-spacing {
+  display: inline-block;
+  width: 605px;
+}
+
 
 .front-label-container {
   display: inline-block;
