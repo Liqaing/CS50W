@@ -115,14 +115,14 @@
 
 .sub-title-spacing {
   display: inline-block;
-  width: 595px;
+  width: 575px;
 }
 
 
 .front-label-container {
   display: inline-block;
-  width: 220px; 
-  /* white-space:nowrap; */
+  width: 200px;
+  /* white-space: nowrap; */
 }
 
 
@@ -169,7 +169,7 @@
 /* add this container to button to give it max width and align it to right if not give it max width, the element will push all the way to the end of screen not just at the end of input element */
 /* so add width to make it stay at the end of input element and padding to make its position perfectly the same */
 .advance-search-button-container {
-  max-width: 720px;
+  max-width: 700px;
   padding: 10px;
   justify-content: right;
 }
@@ -182,9 +182,19 @@
   }
 } */
 
-@media (max-width: 1400px) {
+.last-label {
+  font-size: 13px;
+}
+
+@media (max-width: 1200px) {
   .last-label {
+    display: none;
+  }
+  .sub-title-last-label {
     display: none;
   }
 }
 
+.front-label {
+  font-size: 14px;
+}
