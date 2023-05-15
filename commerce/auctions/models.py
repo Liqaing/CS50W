@@ -15,7 +15,14 @@ class item(models.Model):
     
 class bid(models.Model):
     price = models.IntegerField()
-    bid_item = models.ForeignKey(item, related_name="bid", on_delete=models.CASCADE)
+    bid_item = models.ForeignKey(item, related_name="bids", on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Bid ID {self.id}: Item: {self.bid_item} bid at {self.price}"
+
+class comment(models.Model):
+    comment = models.TextField()
+    item = models.ForeignKey(item, related_name="comments", on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"Item: {self.item}, Comment: {self.comment}"
