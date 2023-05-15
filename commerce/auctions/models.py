@@ -5,7 +5,17 @@ from django.db import models
 class User(AbstractUser):
     pass
 
-class Auction_Listings(models.Model):
+class item(models.Model):
     title = models.CharField(max_length=64)
     describtion = models.TextField()
     image_url = models.URLField(max_length=255)
+    
+    def __str__(self):
+        return f"Item ID {self.id}: {self.title}"
+    
+class bid(models.Model):
+    price = models.IntegerField()
+    bid_item = models.ForeignKey(item, related_name="bid", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Bid ID {self.id}: Item: {self.bid_item} bid at {self.price}"

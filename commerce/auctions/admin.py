@@ -4,4 +4,5 @@ from . import models
 
 # Register your models here.
 admin.site.register(models.User)
-admin.site.register(models.Auction_Listings)
+admin.site.register(models.item)
+admin.site.register(models.bid)
