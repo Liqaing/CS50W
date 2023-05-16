@@ -6,3 +6,4 @@ from . import models
 admin.site.register(models.User)
 admin.site.register(models.item)
 admin.site.register(models.bid)
+admin.site.register(models.comment)
