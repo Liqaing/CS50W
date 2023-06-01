@@ -7,7 +7,7 @@ class User(AbstractUser):
 
 class item(models.Model):
     title = models.CharField(max_length=64)
-    describtion = models.TextField()
+    description = models.TextField()
     starting_bid = models.IntegerField()
     image_url = models.URLField(max_length=255, blank=True)
     

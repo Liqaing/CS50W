@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, item, bid, comment
 
 
 def index(request):
@@ -63,5 +63,21 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def create_listing(request):
-        
+    if request.method == "POST":
+
+        # Get all data from the form
+        title = request.POST["title"]
+        description = request.POST["description"]
+        starting_bid = request.POST["starting_bid"]
+        image_url = request.POST["image_url"]
+
+        # Create item object and add its to the item database
+        new_item = item(title=title, description=description, starting_bid=starting_bid, image_url=image_url)
+        new_item.save()
+
+        # item.add_to_class(title, description, starting_bid, image_url)
+        # print(title, description, starting_bid, image_url)
+
+        return HttpResponseRedirect(reverse("index"))
+                 
     return render(request, "auctions/create_listing.html")
