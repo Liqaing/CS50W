@@ -76,27 +76,37 @@ def create_listing(request):
         # Validate data that user submit
         error_dict = {}
         
+        # Missing input field
         if not title:
             error_dict["missing_title"] = "Listing title is missing"
         if not description:
             error_dict["missing_description"] = "Listing description is missing"
         if not starting_bid:
             error_dict["missing_starting_bid"] = "Listing starting bid is missing"
-
-        # Validate url of image_url
-        validate_url = URLValidator(verify_exists=True)
+        
+        # Validate starting bid
         try:
-            validate_url(image_url)
-        except ValidationError:
-            error_dict["invalid_image_url"] = "Invalid Url For Image"
+            starting_bid = int(starting_bid)
+        except ValueError:
+            error_dict["starting_bid_not_int"] = "Starting Bid need to be a number" 
 
+        # Validate url of image_url, only validate when user input image url
+        if image_url:
+            validate_url = URLValidator() # create urlvalidator object from urlvalidator class 
+            try:
+                validate_url(image_url)
+            except ValidationError:
+                error_dict["invalid_image_url"] = "Invalid Url For Image"
+
+        # Check if there is any error in user input
+        if error_dict:
+            return render(request, "auctions/create_listing.html", {
+                "error": error_dict
+            })
 
         # Create item object and add its to the item database
         new_item = item(title=title, description=description, starting_bid=starting_bid, image_url=image_url)
         new_item.save()
-
-        # item.add_to_class(title, description, starting_bid, image_url)
-        # print(title, description, starting_bid, image_url)
 
         return HttpResponseRedirect(reverse("index"))
                  
