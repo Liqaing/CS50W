@@ -10,7 +10,11 @@ from .models import User, item, bid, comment
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    listings = item.objects.all().values()
+    print(listings)
+    return render(request, "auctions/index.html", {
+        "listings": listings
+    })
 
 
 def login_view(request):
