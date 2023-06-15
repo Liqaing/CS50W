@@ -19,7 +19,7 @@ class bid(models.Model):
     bid_item = models.ForeignKey(item, related_name="bids", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Bid ID {self.id}: Item: {self.bid_item} bid at {self.bid}"
+        return f"Bid ID: {self.id}, {self.bid_item} was bid at {self.bid}"
 
 class comment(models.Model):
     comment = models.TextField()

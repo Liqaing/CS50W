@@ -5,13 +5,31 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from django.db.models import Max
 
 from .models import User, item, bid, comment
 
 
 def index(request):
-    listings = item.objects.all().values()
-    print(listings)
+
+    # Get all listing from item table
+    listings = list(item.objects.all().values())
+    
+    # Get the current price of each active item, which is its the highest value that was bid
+    for listing in listings:
+        # Get bid values from the bid table where its foreigh key = primary key of item table
+        try:
+            # sort bid value in DESC order and get it first value (Which is the highest value)
+            current_bid = bid.objects.filter(bid_item = listing["id"]).order_by("-bid").first()
+        # Except any particular item doesn't have any bid yet
+        except bid.DoesNotExist:
+            current_bid = None
+
+        # current is not none, then assign its value to that listing current bid
+        if current_bid:
+            listing["current_bid"] = current_bid.bid
+
+    
     return render(request, "auctions/index.html", {
         "listings": listings
     })

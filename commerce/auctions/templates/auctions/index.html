@@ -8,6 +8,9 @@
         {{listing.description}}
         {{listing.starting_bid}}
         {{listing.image_url}}
+        {% if listing.current_bid %}
+            {{listing.current_bid}}
+        {% endif %}
     </div>
     {% endfor %}
     
