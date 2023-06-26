@@ -133,3 +133,11 @@ def create_listing(request):
         return HttpResponseRedirect(reverse("index"))
                  
     return render(request, "auctions/create_listing.html")
+
+def view_listing(request, id):
+    
+    # Get item from database base on id from parameter
+    listing = item.objects.get(id=id)
+    print(listing)
+    
+    return HttpResponse("Hello")
