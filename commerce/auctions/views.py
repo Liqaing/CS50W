@@ -19,13 +19,13 @@ def index(request):
     for listing in listings:
         # Get bid values from the bid table where its foreigh key = primary key of item table
         try:
-            # sort bid value in DESC order and get it first value (Which is the highest value)
+            # Sort bid value in DESC order and get it first value (Which is the highest value)
             current_bid = bid.objects.filter(bid_item = listing["id"]).order_by("-bid").first()
         # Except any particular item doesn't have any bid yet
         except bid.DoesNotExist:
             current_bid = None
 
-        # current is not none, then assign its value to that listing current bid
+        # If current_bid is not none, then assign its value to that listing current bid
         if current_bid:
             listing["current_bid"] = current_bid.bid
 
@@ -136,8 +136,15 @@ def create_listing(request):
 
 def view_listing(request, id):
     
-    # Get item from database base on id from parameter
+    # Take the item from database base on id from parameter (get() return object)
     listing = item.objects.get(id=id)
-    print(listing)
     
-    return HttpResponse("Hello")
+    # Get the current highest bid of the item from the bid table
+    current_bid = bid.objects.filter(bid_item = listing.id).order_by("-bid").first()
+
+    # Then assign it to new field of listing object (curent_bid is a query set return by filter)
+    listing.current_bid = current_bid.bid
+
+    print(listing.current_bid)
+    
+    return render(request, "auctions/listing.html")
