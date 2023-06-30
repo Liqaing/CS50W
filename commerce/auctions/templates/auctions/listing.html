@@ -1,9 +1,23 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <div class="container-fuild">
-        <h2>
-            
+    <div class="container-fuild my-2">
+        <h2 class="font-weight-normal">
+            listing: {{listing.title}}
         </h2>
+
+        <div class="row mt-4 mx-0 border border-secondary">
+            <div class="col-md-5 my-2">
+                <img src="{{listing.image_url}}" class="img-fluid listing_img_listing_html float-end" alt="Listing Image">
+            </div>
+            <div class="col-md-7 overflow-auto">
+                <div class=" listing_img_listing_html">
+                    <h2>Description</h2>
+                    <div class="listing_description">
+                        {{listing.description}}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

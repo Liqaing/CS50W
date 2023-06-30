@@ -136,10 +136,10 @@ def create_listing(request):
 
 def view_listing(request, id):
     
-    # Take the item from database base on id from parameter (get() return object)
+    # Retrive the item from database base on id from parameter (get() return object)
     listing = item.objects.get(id=id)
     
-    # Get the current highest bid of the item from the bid table
+    # Retrive the current highest bid of the item from the bid table
     current_bid = bid.objects.filter(bid_item = listing.id).order_by("-bid").first()
 
     # Then assign it to new field of listing object (curent_bid is a query set return by filter)
@@ -147,4 +147,6 @@ def view_listing(request, id):
 
     print(listing.current_bid)
     
-    return render(request, "auctions/listing.html")
+    return render(request, "auctions/listing.html", {
+        "listing": listing
+    })

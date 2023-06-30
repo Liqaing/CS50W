@@ -16,3 +16,13 @@ body {
     color: #000000;
     text-decoration: none;
 }
+
+.listing_img_listing_html {
+    height: 550px;
+    width: auto;
+}
+
+.listing_description {
+    text-indent: 20px;
+    overflow: auto;
+}
