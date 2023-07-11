@@ -2,11 +2,19 @@
 
 {% block body %}
     <div class="container-fuild my-2">
-        <h2 class="font-weight-normal">
-            listing: {{listing.title}}
-        </h2>
-
-        <div class="row mt-4 mx-0 border border-secondary">
+        <div>
+            <h2>Listing Title: {{listing.title}}</h2>
+            <h2>Current Bid: ${{listing.current_bid}}</h2>
+            {% if user.is_authenticated %}
+                <form action="{% url 'view-listing' listing.id %}" method="POST" class="form-inline">
+                    {% csrf_token    %}
+                    <button class="btn btn-secondary mt-2 mr-4">Add To Watchlist</button>
+                    <button class="btn btn-secondary mt-2">Close The Auction</button>
+                </form>
+            {% endif %}
+        </div>
+        
+        <div class="row my-4 mx-0 border border-secondary">
             <div class="col-md-5 my-2">
                 <img src="{{listing.image_url}}" class="img-fluid listing_img_listing_html float-end" alt="Listing Image">
             </div>
@@ -19,5 +27,27 @@
                 </div>
             </div>
         </div>
+        {% if user.is_authenticated %}
+            <form action="" method="POST" class="form-inline">
+                <label for="bid">
+                    <h4>
+                        Place Your Bid:
+                    </h4>
+                </label>
+                <input type="text" class="form-control ml-3 mr-2" id="bid" placeholder="Bid">
+                <input type="submit" value="Place Bid" class="btn btn-primary">
+            </form>
+
+            <div>
+                <h3>Listing Comment: </h3>
+                <div class="container-fuild mb-2">
+                    <form action="" method="POST">
+                        <label for="comment">Your Comment</label>
+                        <textarea class="form-control" name="comment" id="comment" placeholder="Enter Comment" rows="2"></textarea>
+                        <input class="btn btn-primary mt-2" type="submit" value="Post Comment">
+                    </form>
+                </div>  
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
