@@ -8,7 +8,7 @@
             {% if user.is_authenticated %}
                 <form action="{% url 'view-listing' listing.id %}" method="POST" class="form-inline">
                     {% csrf_token    %}
-                    <button class="btn btn-secondary mt-2 mr-4">Add To Watchlist</button>
+                    <button class="btn btn-secondary mt-2 mr-4" name="watchlist" value="add_to_watchlist">Add To Watchlist</button>
                     <button class="btn btn-secondary mt-2">Close The Auction</button>
                 </form>
             {% endif %}

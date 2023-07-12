@@ -27,3 +27,12 @@ class comment(models.Model):
     
     def __str__(self):
         return f"Item: {self.item}, Comment: {self.comment}"
+    
+# Tide user and item that they put to watchlist
+class watchlist(models.Model):
+    item_id = models.ForeignKey(item, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        # Define unique attribute, so combine between items id and user should be unique
+        unique_together = ('item_id', 'user')

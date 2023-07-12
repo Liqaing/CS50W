@@ -135,6 +135,10 @@ def create_listing(request):
     return render(request, "auctions/create_listing.html")
 
 def view_listing(request, id):
+
+    if request.method == "POST":
+        
+        print(request.username)
     
     # Retrive the item from database base on id from parameter (get() return object)
     listing = item.objects.get(id=id)
@@ -145,7 +149,7 @@ def view_listing(request, id):
     # Then assign it to new field of listing object (curent_bid is a query set return by filter)
     listing.current_bid = current_bid.bid
 
-    print(listing.current_bid)
+    # print(listing.current_bid)
     
     return render(request, "auctions/listing.html", {
         "listing": listing
