@@ -30,7 +30,7 @@ class comment(models.Model):
     
 # Tide user and item that they put to watchlist
 class watchlist(models.Model):
-    item_id = models.ForeignKey(item, on_delete=models.CASCADE)
+    item = models.ForeignKey(item, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:

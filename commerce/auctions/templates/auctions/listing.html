@@ -8,10 +8,18 @@
             {% if user.is_authenticated %}
                 <form action="{% url 'view-listing' listing.id %}" method="POST" class="form-inline">
                     {% csrf_token    %}
-                    <button class="btn btn-secondary mt-2 mr-4" name="watchlist" value="add_to_watchlist">Add To Watchlist</button>
+                    <input type="hidden" name="username" value="{{ user.username }}">
+                    {% if listing.in_watchlist %}
+                        <button class="btn btn-secondary mt-2 mr-4" name="watchlist" value="remove_watchlist">Remove From Watchlist</button>
+                    {% else %}
+                        <button class="btn btn-secondary mt-2 mr-4" name="watchlist" value="add_watchlist">Add To Watchlist</button>
+                    {% endif %}    
+                    
+
                     <button class="btn btn-secondary mt-2">Close The Auction</button>
                 </form>
             {% endif %}
+        
         </div>
         
         <div class="row my-4 mx-0 border border-secondary">
@@ -38,7 +46,7 @@
                 <input type="submit" value="Place Bid" class="btn btn-primary">
             </form>
 
-            <div>
+            <div class="container-fuild mt-4">
                 <h3>Listing Comment: </h3>
                 <div class="container-fuild mb-2">
                     <form action="" method="POST">

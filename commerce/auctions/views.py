@@ -5,9 +5,8 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
-from django.db.models import Max
 
-from .models import User, item, bid, comment
+from .models import User, item, bid, comment, watchlist
 
 
 def index(request):
@@ -138,7 +137,11 @@ def view_listing(request, id):
 
     if request.method == "POST":
         
-        print(request.username)
+        # Check if user click "Add to watchlist" button
+        if 'watchlist' in request.POST:
+            username = request.POST["username"]
+            # Check if user have the item added in thier watchlist, and change value of button to remove or add accordingly
+            print(request.POST["watchlist"])
     
     # Retrive the item from database base on id from parameter (get() return object)
     listing = item.objects.get(id=id)
@@ -149,7 +152,17 @@ def view_listing(request, id):
     # Then assign it to new field of listing object (curent_bid is a query set return by filter)
     listing.current_bid = current_bid.bid
 
-    # print(listing.current_bid)
+    # Retrive user id from request if they logged in
+    user_id = request.user.id
+    
+    # Check if user have the item in their watchlist
+    user_watchlist = watchlist.objects.filter(user=user_id, item=id)
+    if user_watchlist:
+        listing.in_watchlist = True
+    else:
+        listing.in_watchlist = False
+
+    print(listing.in_watchlist)
     
     return render(request, "auctions/listing.html", {
         "listing": listing
