@@ -139,9 +139,28 @@ def view_listing(request, id):
         
         # Check if user click "Add to watchlist" button
         if 'watchlist' in request.POST:
-            username = request.POST["username"]
+            
+            # User add listing item to their watchlist
+            if request.POST["watchlist"] == "add_watchlist":
+
+                # Retrive item instance from item table then pass it to watchlist table
+                try:
+                    listing_item = item.objects.get(id=id)
+                    add_watchlist = watchlist.objects.create(item=listing_item, user=request.user)
+                    add_watchlist.save()
+
+                # Except if this item is already in the watchlist
+                except IntegrityError:
+                    pass
+
+            elif request.POST["watchlist"] == "remove_watchlist":
+                
+                # Query for data instance then delete it
+                remove_watchlist = watchlist.objects.get(item=id, user=request.user.id)
+                remove_watchlist.delete()
+                
             # Check if user have the item added in thier watchlist, and change value of button to remove or add accordingly
-            print(request.POST["watchlist"])
+            
     
     # Retrive the item from database base on id from parameter (get() return object)
     listing = item.objects.get(id=id)
@@ -156,13 +175,12 @@ def view_listing(request, id):
     user_id = request.user.id
     
     # Check if user have the item in their watchlist
-    user_watchlist = watchlist.objects.filter(user=user_id, item=id)
-    if user_watchlist:
+    try:
+        watchlist.objects.get(user=user_id, item=id)
         listing.in_watchlist = True
-    else:
+    except watchlist.DoesNotExist:
         listing.in_watchlist = False
 
-    print(listing.in_watchlist)
     
     return render(request, "auctions/listing.html", {
         "listing": listing
