@@ -36,15 +36,23 @@
             </div>
         </div>
         {% if user.is_authenticated %}
-            <form action="" method="POST" class="form-inline">
+            <form action="{% url 'view-listing' listing.id %}" method="POST" class="form-inline">
+                {% csrf_token %}
                 <label for="bid">
                     <h4>
                         Place Your Bid:
                     </h4>
                 </label>
-                <input type="text" class="form-control ml-3 mr-2" id="bid" placeholder="Bid">
+                <input type="text" class="form-control ml-3 mr-2" name="bid" id="bid" placeholder="Bid">
                 <input type="submit" value="Place Bid" class="btn btn-primary">
+                <h5 class="ml-2 text-danger">
+                    {% if listing.error %}
+                        {{listing.error}}
+                    {% endif %}
+                </h5>
+                
             </form>
+            
 
             <div class="container-fuild mt-4">
                 <h3>Listing Comment: </h3>

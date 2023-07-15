@@ -135,10 +135,19 @@ def create_listing(request):
 
 def view_listing(request, id):
 
+    # Retrive the item from database base on id from parameter (get() return object)
+    listing = item.objects.get(id=id)
+    
+    # Retrive the current highest bid of the item from the bid table
+    current_bid = bid.objects.filter(bid_item = listing.id).order_by("-bid").first()
+
+    # Then assign it to new field of listing object (curent_bid is a query set return by filter)
+    listing.current_bid = current_bid.bid
+    
     if request.method == "POST":
         
-        # Check if user click "Add to watchlist" button
-        if 'watchlist' in request.POST:
+        # Add or remove watchlist
+        if "watchlist" in request.POST:
             
             # User add listing item to their watchlist
             if request.POST["watchlist"] == "add_watchlist":
@@ -155,22 +164,23 @@ def view_listing(request, id):
 
             elif request.POST["watchlist"] == "remove_watchlist":
                 
-                # Query for data instance then delete it
-                remove_watchlist = watchlist.objects.get(item=id, user=request.user.id)
-                remove_watchlist.delete()
-                
-            # Check if user have the item added in thier watchlist, and change value of button to remove or add accordingly
+                # Query for data instance then delete it, exception it already deleted or doesn't exist
+                try:
+                    remove_watchlist = watchlist.objects.get(item=id, user=request.user.id)
+                    remove_watchlist.delete()
+                except watchlist.DoesNotExist:
+                    pass
+        
+        # Check if user submit their bid value
+        elif "bid" in request.POST:
+
+            # Validate bid value that user input
+            try:
+                bid_value = int(request.POST["bid"])
+            except ValueError:
+                listing.error = "Invalid Bid"
             
     
-    # Retrive the item from database base on id from parameter (get() return object)
-    listing = item.objects.get(id=id)
-    
-    # Retrive the current highest bid of the item from the bid table
-    current_bid = bid.objects.filter(bid_item = listing.id).order_by("-bid").first()
-
-    # Then assign it to new field of listing object (curent_bid is a query set return by filter)
-    listing.current_bid = current_bid.bid
-
     # Retrive user id from request if they logged in
     user_id = request.user.id
     
@@ -180,7 +190,6 @@ def view_listing(request, id):
         listing.in_watchlist = True
     except watchlist.DoesNotExist:
         listing.in_watchlist = False
-
     
     return render(request, "auctions/listing.html", {
         "listing": listing
