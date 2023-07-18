@@ -142,8 +142,10 @@ def view_listing(request, id):
     current_bid = bid.objects.filter(bid_item = listing.id).order_by("-bid").first()
 
     # Then assign it to new field of listing object (curent_bid is a query set return by filter)
-    listing.current_bid = current_bid.bid
+    if current_bid:
+        listing.current_bid = current_bid.bid
     
+    # On user request
     if request.method == "POST":
         
         # Add or remove watchlist
@@ -176,11 +178,21 @@ def view_listing(request, id):
 
             # Validate bid value that user input
             try:
-                bid_value = int(request.POST["bid"])
+                bid_value = float(request.POST["bid"])
             except ValueError:
                 listing.error = "Invalid Bid"
-            
-    
+                bid_value = None
+
+            # Verifing the bid with starting bid
+            if bid_value:
+                if bid_value < listing.starting_bid:
+                    listing.error = "You Cannot Bid Less Than The Starting Bid"
+
+                if listing.current_bid:
+                    if bid_value > listing.starting_bid and bid_value <= listing.current_bid:
+                        listing.error = "Your Bid Must Be Greater Than Current Bid"
+
+
     # Retrive user id from request if they logged in
     user_id = request.user.id
     

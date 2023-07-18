@@ -4,7 +4,11 @@
     <div class="container-fuild my-2">
         <div>
             <h2>Listing Title: {{listing.title}}</h2>
-            <h2>Current Bid: ${{listing.current_bid}}</h2>
+            {% if listing.current_bid %}
+                <h2>Current Bid: ${{listing.current_bid}}</h2>
+            {% else %}
+                <h2>Starting Bid: ${{listing.starting_bid}}</h2>
+            {% endif %}
             {% if user.is_authenticated %}
                 <form action="{% url 'view-listing' listing.id %}" method="POST" class="form-inline">
                     {% csrf_token %}
@@ -28,6 +32,9 @@
             </div>
             <div class="col-md-7 overflow-auto">
                 <div class=" listing_img_listing_html">
+                    <div class="mt-2">
+                        <h2>Starting Bid: ${{listing.starting_bid}}</h2>
+                    </div>
                     <h2>Description</h2>
                     <div class="listing_description">
                         {{listing.description}}
