@@ -17,6 +17,7 @@ class item(models.Model):
 class bid(models.Model):
     bid = models.IntegerField()
     bid_item = models.ForeignKey(item, related_name="bids", on_delete=models.CASCADE)
+    bid_user = models.ForeignKey(User, related_name="bids_item", on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Bid ID: {self.id}, {self.bid_item} was bid at {self.bid}"
@@ -35,4 +36,4 @@ class watchlist(models.Model):
 
     class Meta:
         # Define unique attribute, so combine between items id and user should be unique
-        unique_together = ('item_id', 'user')
+        unique_together = ('item', 'user')

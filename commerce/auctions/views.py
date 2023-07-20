@@ -137,7 +137,7 @@ def view_listing(request, id):
 
     # Retrive the item from database base on id from parameter (get() return object)
     listing = item.objects.get(id=id)
-    
+
     # Retrive the current highest bid of the item from the bid table
     current_bid = bid.objects.filter(bid_item = listing.id).order_by("-bid").first()
 
@@ -156,8 +156,7 @@ def view_listing(request, id):
 
                 # Retrive item instance from item table then pass it to watchlist table
                 try:
-                    listing_item = item.objects.get(id=id)
-                    add_watchlist = watchlist.objects.create(item=listing_item, user=request.user)
+                    add_watchlist = watchlist.objects.create(item=listing, user=request.user)
                     add_watchlist.save()
 
                 # Except if this item is already in the watchlist
@@ -187,11 +186,25 @@ def view_listing(request, id):
             if bid_value:
                 if bid_value < listing.starting_bid:
                     listing.error = "You Cannot Bid Less Than The Starting Bid"
+                else:
+                    listing.error = None
+                
 
+                # If the listing have other bid than starting bid
                 if listing.current_bid:
-                    if bid_value > listing.starting_bid and bid_value <= listing.current_bid:
+                    if bid_value >= listing.starting_bid and bid_value <= listing.current_bid:
                         listing.error = "Your Bid Must Be Greater Than Current Bid"
+                else:
+                    listing.error = None
 
+                if not listing.error:
+                    
+                    # Proceed with the bid
+                    user_bid = bid(bid=bid_value, bid_item=listing, bid_user=request.user)
+                    user_bid.save()
+
+                    # Update the current bid of item, after user succeeded with the bid 
+                    listing.current_bid = bid_value
 
     # Retrive user id from request if they logged in
     user_id = request.user.id
