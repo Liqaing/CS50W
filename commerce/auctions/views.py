@@ -126,7 +126,8 @@ def create_listing(request):
             })
 
         # Create item object and add its to the item database
-        new_item = item(title=title, description=description, starting_bid=starting_bid, image_url=image_url)
+        owner = request.user
+        new_item = item(title=title, description=description, starting_bid=starting_bid, image_url=image_url, owner=owner)
         new_item.save()
 
         return HttpResponseRedirect(reverse("index"))
@@ -144,13 +145,21 @@ def view_listing(request, id):
     # Then assign it to new field of listing object (curent_bid is a query set return by filter)
     if current_bid:
         listing.current_bid = current_bid.bid
-    
+
+    # Check if user is the owner of the listing
+    if listing.owner.id == request.user.id:
+        listing.is_owner = True
+    else:
+        listing.is_owner = False
+
     # On user request
     if request.method == "POST":
         
         # Add or remove watchlist
         if "watchlist" in request.POST:
-            
+
+            print("hi")
+
             # User add listing item to their watchlist
             if request.POST["watchlist"] == "add_watchlist":
 
@@ -187,8 +196,7 @@ def view_listing(request, id):
                 if bid_value < listing.starting_bid:
                     listing.error = "You Cannot Bid Less Than The Starting Bid"
                 else:
-                    listing.error = None
-                
+                    listing.error = None                
 
                 # If the listing have other bid than starting bid
                 if listing.current_bid:
@@ -205,6 +213,22 @@ def view_listing(request, id):
 
                     # Update the current bid of item, after user succeeded with the bid 
                     listing.current_bid = bid_value
+
+                    # Update current highest bid, so we'll to find the winner
+                    current_bid = bid.objects.filter(bid_item = listing.id).order_by("-bid").first()
+                    print(current_bid.bid_user)
+
+        elif "close" in request.POST:
+            if listing.is_owner and listing.is_active:
+
+                # Find the winner with the highest bid
+                winner = current_bid.bid_user
+                listing.winner = winner
+
+                # Make the listing no longer active
+                listing.is_active = False
+                
+                listing.save()
 
     # Retrive user id from request if they logged in
     user_id = request.user.id

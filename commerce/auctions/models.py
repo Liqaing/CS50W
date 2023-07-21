@@ -10,6 +10,9 @@ class item(models.Model):
     description = models.TextField()
     starting_bid = models.IntegerField()
     image_url = models.URLField(max_length=255, blank=True)
+    owner = models.ForeignKey(User, related_name="items", on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+    winner = models.ForeignKey(User, related_name="winning_item", null=True, default=None, on_delete=models.CASCADE)
     
     def __str__(self):
         return f"Item ID {self.id}: {self.title}"
