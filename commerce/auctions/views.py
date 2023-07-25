@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from django.contrib.auth.decorators import login_required
 
 from .models import User, item, bid, comment, watchlist
 
@@ -85,6 +86,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+@login_required(login_url="login")
 def create_listing(request):
     if request.method == "POST":
 
@@ -145,6 +147,9 @@ def view_listing(request, id):
     # Then assign it to new field of listing object (curent_bid is a query set return by filter)
     if current_bid:
         listing.current_bid = current_bid.bid
+    # If there is not bid yet, other than starting bid
+    else:
+        listing.current_bid = None
 
     # Check if user is the owner of the listing
     if listing.owner.id == request.user.id:
@@ -199,6 +204,7 @@ def view_listing(request, id):
                     listing.error = None                
 
                 # If the listing have other bid than starting bid
+                
                 if listing.current_bid:
                     if bid_value >= listing.starting_bid and bid_value <= listing.current_bid:
                         listing.error = "Your Bid Must Be Greater Than Current Bid"

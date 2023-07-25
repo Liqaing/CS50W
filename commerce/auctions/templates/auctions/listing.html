@@ -12,7 +12,9 @@
 
             {% if not listing.is_active %}
                 <h2>The auction for this listing is already closed</h2>
-                <h2>Winner: {{listing.winner}} at the bid of ${{listing.current_bid}} </h2>
+                {% if listing.winner.id == user.id %}
+                    <h2>Winner: {{listing.winner}} at the bid of ${{listing.current_bid}} </h2>
+                {% endif %}
             {% endif %}
             
             {% if user.is_authenticated %}
@@ -40,9 +42,11 @@
         </div>
         
         <div class="row my-4 mx-0 border border-secondary">
-            <div class="col-md-5 my-2">
-                <img src="{{listing.image_url}}" class="img-fluid listing_img_listing_html float-end" alt="Listing Image">
-            </div>
+            {% if listing.image_url %}
+                <div class="col-md-5 my-2">
+                    <img src="{{listing.image_url}}" class="img-fluid listing_img_listing_html float-end" alt="Listing Image">
+                </div>
+            
             <div class="col-md-7 overflow-auto">
                 <div class=" listing_img_listing_html">
                     <div class="mt-2">
@@ -54,29 +58,40 @@
                     </div>
                 </div>
             </div>
+            {% else %}
+            <div class="col-md-12 overflow-auto">
+                <div class=" listing_img_listing_html">
+                    <div class="mt-2">
+                        <h2>Starting Bid: ${{listing.starting_bid}}</h2>
+                    </div>
+                    <h2>Description</h2>
+                    <div class="listing_description">
+                        {{listing.description}}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
         {% if user.is_authenticated %}
 
             {% if listing.is_active %}
                 <form action="{% url 'view-listing' listing.id %}" method="POST" class="form-inline">
                     {% csrf_token %}
-                    <label for="bid">
-                        <h4>
-                            Place Your Bid:
-                        </h4>
-                    </label>
-                    <input type="text" class="form-control ml-3 mr-2" name="bid" id="bid" placeholder="Bid">
-                    <input type="submit" value="Place Bid" class="btn btn-primary">
-                    <h5 class="ml-2 text-danger">
-                        {% if listing.error %}
-                            {{listing.error}}
-                        {% endif %}
-                    </h5>
+                    <div class="form-group">
+                        <label for="bid" class="h4">Place Your Bid:</label>
+                        <input type="text" class="form-control ml-3 mr-2" name="bid" id="bid" placeholder="Bid">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Place Bid</button>
                 </form>
+                {% if listing.error %}    
+                    <h5 class="text-danger">
+                        {{listing.error}}
+                    </h5>
+                {% endif %}
             {% endif %}
 
             <div class="container-fuild mt-4">
-                <h3>Listing Comment: </h3>
+                <h3>Listing Comment:</h3>
                 <div class="container-fuild mb-2">
                     <form action="" method="POST">
                         <label for="comment">Your Comment</label>
