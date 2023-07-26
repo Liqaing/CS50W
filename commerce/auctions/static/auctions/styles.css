@@ -1,3 +1,28 @@
 body {
     padding: 10px;
 }
+
+.listing_img {
+    height: 400px;
+    width: auto;
+}
+
+.listing_link:link {
+    color: #000000;
+    text-decoration: none;
+}
+
+.listing_link:link, .listing_link:hover, .listing_link:active, .listing_link:visited {
+    color: #000000;
+    text-decoration: none;
+}
+
+.listing_img_listing_html {
+    height: 550px;
+    width: auto;
+}
+
+.listing_description {
+    text-indent: 20px;
+    overflow: auto;
+}

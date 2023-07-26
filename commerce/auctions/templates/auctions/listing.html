@@ -1,0 +1,124 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="container-fuild my-2">
+        <div>
+            <h2>Listing Title: {{listing.title}}</h2>
+            {% if listing.current_bid %}
+                <h2>Current Bid: ${{listing.current_bid}}</h2>
+            {% else %}
+                <h2>Starting Bid: ${{listing.starting_bid}}</h2>
+            {% endif %}
+
+            {% if not listing.is_active %}
+                <h2>The auction for this listing is already closed</h2>
+                {% if listing.winner.id == user.id %}
+                    <h2>Winner: {{listing.winner}} at the bid of ${{listing.current_bid}} </h2>
+                {% endif %}
+            {% endif %}
+            
+            {% if user.is_authenticated %}
+                <form action="{% url 'view-listing' listing.id %}" method="POST" class="form-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="username" value="{{ user.username }}">
+                    
+                    {% if listing.in_watchlist %}
+                        <button class="btn btn-secondary mt-2 mr-4" name="watchlist" value="remove_watchlist">Remove From Watchlist</button>
+                    {% else %}
+                        <button class="btn btn-secondary mt-2 mr-4" name="watchlist" value="add_watchlist">Add To Watchlist</button>
+                    {% endif %}
+                    
+                    {% if listing.is_owner %}
+                        {% if listing.is_active %}
+                            <button class="btn btn-secondary mt-2" name="close" value="close">Close The Auction</button>
+                        {% else %}
+                            <button class="btn btn-secondary mt-2" name="close" value="close" disabled>Close The Auction</button>
+                        {% endif %}
+                    {% endif %}
+
+                </form>
+            {% endif %}
+        
+        </div>
+        
+        <div class="row my-4 mx-0 border border-secondary">
+            {% if listing.image_url %}
+                <div class="col-md-5 my-2">
+                    <img src="{{listing.image_url}}" class="img-fluid listing_img_listing_html float-end" alt="Listing Image">
+                </div>
+            
+                <div class="col-md-7 overflow-auto">
+                    <div class=" listing_img_listing_html">
+                        <div class="mt-2">
+                            <h2>Starting Bid: ${{listing.starting_bid}}</h2>
+                        </div>
+                        <h2>Description</h2>
+                        <div class="listing_description">
+                            {{listing.description}}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-md-12 overflow-auto">
+                    <div class=" listing_img_listing_html">
+                        <div class="mt-2">
+                            <h2>Starting Bid: ${{listing.starting_bid}}</h2>
+                        </div>
+                        <h2>Description</h2>
+                        <div class="listing_description">
+                            {{listing.description}}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {% if user.is_authenticated %}
+
+            {% if listing.is_active %}
+                <form action="{% url 'view-listing' listing.id %}" method="POST" class="form-inline">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="bid" class="h4">Place Your Bid:</label>
+                        <input type="text" class="form-control ml-3 mr-2" name="bid" id="bid" placeholder="Bid">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Place Bid</button>
+                </form>
+                {% if listing.error %}    
+                    <h5 class="text-danger">
+                        {{listing.error}}
+                    </h5>
+                {% endif %}
+            {% endif %}
+
+            <div class="container-fuild mt-4">
+                <h3>Listing Comment: </h3>
+                <div class="container-fuild mb-2">
+                    <form action="{% url 'view-listing' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        <label for="comment">Your Comment: </label>
+                        <textarea class="form-control" name="comment" id="comment" placeholder="Enter Comment" rows="2"></textarea>
+                        <input class="btn btn-primary mt-2" type="submit" value="Post Comment">
+                    </form>
+                </div>
+                
+                {% if listing.comment %}
+                    <p>All Comment: </p>
+                    {% for comment in listing.comment %}
+                        <div class="border border-secondary overflow-auto my-3 p-2">
+                            <p>
+                                User: 
+                                <strong>
+                                    {{comment.commenter}}
+                                </strong>
+                            </p>
+                            <div class="listing_description">
+                                {{comment.comment}}
+                            </div>
+                        </div>
+                        
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

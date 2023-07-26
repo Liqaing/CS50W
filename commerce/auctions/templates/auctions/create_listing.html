@@ -1,0 +1,63 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Create New Listing</h2>
+    <form action="{% url 'create-listing' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Listing Title</label>
+            <input type="text" class="form-control" name="title" id="title" placeholder="Enter Title" required>
+            {% if error.missing_title %}
+                <ul>
+                    <li class="text-danger">
+                        {{ error.missing_title }}
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="description">Listing Description</label>
+            <textarea class="form-control" name="description" id="description" placeholder="Enter Description" rows="4" required></textarea>
+            {% if error.missing_description %}
+                <ul>
+                    <li class="text-danger">
+                        {{error.missing_description}}
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="starting_bid">Starting Bid For Listing</label>
+            <input type="number" class="form-control" name="starting_bid" id="starting_bid" placeholder="Enter Starting Bid" min="1" step="any" required>
+            {% if error.missing_starting_bid %}
+                <ul>
+                    <li class="text-danger">
+                        {{error.missing_starting_bid}}
+                    </li>
+                </ul>
+            {% endif %}
+            {% if error.starting_bid_not_int %}
+                <ul>
+                    <li class="text-danger">
+                        {{error.starting_bid_not_int}}
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="image_url">URL For Image (Optional)</label>
+            <input type="url" class="form-control" name="image_url" id="image_url" placeholder="Enter Image URL">
+            {% if error.invalid_image_url %}
+                <ul>
+                    <li class="text-danger">
+                        {{error.invalid_image_url}}
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Submit Listing">
+        </div>
+        
+    </form>
+{% endblock %}
