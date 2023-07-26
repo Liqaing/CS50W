@@ -232,12 +232,16 @@ def view_listing(request, id):
                     
         elif "comment" in request.POST:
             
-            # Save new comment to database
-            new_comment = comment(comment=request.POST["comment"], item=listing, commenter=request.user)
-            new_comment.save()
+            # If comment is valid
+            user_commemt = request.POST["comment"]
+            if user_commemt:
 
-            # Update listing comment to render for user
-            listing.comment = comment.objects.filter(item_id=listing.id) 
+                # Save new comment to database
+                new_comment = comment(comment=user_commemt, item=listing, commenter=request.user)
+                new_comment.save()
+
+                # Update listing comment to render for user
+                listing.comment = comment.objects.filter(item_id=listing.id) 
 
         elif "close" in request.POST:
             if listing.is_owner and listing.is_active:

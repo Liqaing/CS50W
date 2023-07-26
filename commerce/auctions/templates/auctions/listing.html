@@ -100,25 +100,24 @@
                         <input class="btn btn-primary mt-2" type="submit" value="Post Comment">
                     </form>
                 </div>
-                
-                {% if listing.comment %}
-                    <p>All Comment: </p>
-                    {% for comment in listing.comment %}
-                        <div class="border border-secondary overflow-auto my-3 p-2">
-                            <p>
-                                User: 
-                                <strong>
-                                    {{comment.commenter}}
-                                </strong>
-                            </p>
-                            <div class="listing_description">
-                                {{comment.comment}}
-                            </div>
-                        </div>
-                        
-                    {% endfor %}
-                {% endif %}
             </div>
+        {% endif %}
+        {% if listing.comment %}
+            <p>All Comment: </p>
+            {% for comment in listing.comment %}
+                <div class="border border-secondary overflow-auto my-3 p-2">
+                    <p>
+                        User: 
+                        <strong>
+                            {{comment.commenter}}
+                        </strong>
+                    </p>
+                    <div class="listing_description">
+                        {{comment.comment}}
+                    </div>
+                </div>
+                
+            {% endfor %}
         {% endif %}
     </div>
 {% endblock %}
