@@ -28,9 +28,10 @@ class bid(models.Model):
 class comment(models.Model):
     comment = models.TextField()
     item = models.ForeignKey(item, related_name="comments", on_delete=models.CASCADE)
+    commenter = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
     
     def __str__(self):
-        return f"Item: {self.item}, Comment: {self.comment}"
+        return f"Item: {self.item}, User: {self.commenter}, Comment: {self.comment}"
     
 # Tide user and item that they put to watchlist
 class watchlist(models.Model):

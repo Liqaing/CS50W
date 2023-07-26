@@ -157,6 +157,13 @@ def view_listing(request, id):
     else:
         listing.is_owner = False
 
+    # Display all comment
+    comments = comment.objects.filter(item_id = listing.id)
+    if comments:
+       listing.comment = comments
+    else:
+        listing.comment = None
+
     # On user request
     if request.method == "POST":
         
@@ -222,7 +229,15 @@ def view_listing(request, id):
 
                     # Update current highest bid, so we'll to find the winner
                     current_bid = bid.objects.filter(bid_item = listing.id).order_by("-bid").first()
-                    print(current_bid.bid_user)
+                    
+        elif "comment" in request.POST:
+            
+            # Save new comment to database
+            new_comment = comment(comment=request.POST["comment"], item=listing, commenter=request.user)
+            new_comment.save()
+
+            # Update listing comment to render for user
+            listing.comment = comment.objects.filter(item_id=listing.id) 
 
         elif "close" in request.POST:
             if listing.is_owner and listing.is_active:
