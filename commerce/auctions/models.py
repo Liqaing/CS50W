@@ -24,7 +24,7 @@ class item(models.Model):
     owner = models.ForeignKey(User, related_name="items", on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     winner = models.ForeignKey(User, related_name="winning_item", null=True, default=None, on_delete=models.CASCADE)
-    categories = models.ForeignKey(Category, name="items", default=Category.get_other_category_pk ,on_delete=models.CASCADE)
+    categories = models.ForeignKey(Category, related_name="items", default=Category.get_other_category_pk, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Item ID {self.id}: {self.title}"
