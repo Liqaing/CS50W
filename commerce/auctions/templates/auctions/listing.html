@@ -16,6 +16,9 @@
                     <h2>Winner: {{listing.winner}} at the bid of ${{listing.current_bid}} </h2>
                 {% endif %}
             {% endif %}
+            <h2>
+                Category: {{listing.category}}
+            </h2>
             
             {% if user.is_authenticated %}
                 <form action="{% url 'view-listing' listing.id %}" method="POST" class="form-inline">
@@ -100,25 +103,24 @@
                         <input class="btn btn-primary mt-2" type="submit" value="Post Comment">
                     </form>
                 </div>
-                
-                {% if listing.comment %}
-                    <p>All Comment: </p>
-                    {% for comment in listing.comment %}
-                        <div class="border border-secondary overflow-auto my-3 p-2">
-                            <p>
-                                User: 
-                                <strong>
-                                    {{comment.commenter}}
-                                </strong>
-                            </p>
-                            <div class="listing_description">
-                                {{comment.comment}}
-                            </div>
-                        </div>
-                        
-                    {% endfor %}
-                {% endif %}
             </div>
+        {% endif %}
+        {% if listing.comment %}
+            <p>All Comment: </p>
+            {% for comment in listing.comment %}
+                <div class="border border-secondary overflow-auto my-3 p-2">
+                    <p>
+                        User: 
+                        <strong>
+                            {{comment.commenter}}
+                        </strong>
+                    </p>
+                    <div class="listing_description">
+                        {{comment.comment}}
+                    </div>
+                </div>
+                
+            {% endfor %}
         {% endif %}
     </div>
 {% endblock %}

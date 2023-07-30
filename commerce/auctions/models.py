@@ -5,6 +5,17 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+class Category(models.Model):
+    category_name = models.CharField(max_length=64)
+    
+    def __str__(self):
+        return f"Category name: {self.category_name}"
+    
+    @classmethod
+    def get_other_category_pk(category):
+        other_category, created = category.objects.get_or_create(category_name = "Other")
+        return other_category.pk
+
 class item(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField()
@@ -13,7 +24,8 @@ class item(models.Model):
     owner = models.ForeignKey(User, related_name="items", on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     winner = models.ForeignKey(User, related_name="winning_item", null=True, default=None, on_delete=models.CASCADE)
-    
+    categories = models.ForeignKey(Category, related_name="items", default=Category.get_other_category_pk, on_delete=models.CASCADE)
+
     def __str__(self):
         return f"Item ID {self.id}: {self.title}"
     

@@ -1,0 +1,17 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    <h2>
+        Categories
+    </h2>
+    {% if categories %}
+        <div class="list-group list-group-flush">
+            {% for category in categories %}
+                    <a href="{% url 'category_listing' category.id %}" class="list-group-item list-group-item-action">
+                        {{category.category_name}}
+                        <span class="badge badge-primary badge-pill">{{category.number_of_item}}</span>
+                    </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

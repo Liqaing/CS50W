@@ -7,7 +7,7 @@ from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 
-from .models import User, item, bid, comment, watchlist
+from .models import User, item, bid, comment, watchlist, Category
 
 
 def index(request):
@@ -28,8 +28,10 @@ def index(request):
         # If current_bid is not none, then assign its value to that listing current bid
         if current_bid:
             listing["current_bid"] = current_bid.bid
-
     
+        # Retrive category name from table
+        listing["category"] = Category.objects.get(id = listing["categories_id"]).category_name
+
     return render(request, "auctions/index.html", {
         "listings": listings
     })
@@ -95,6 +97,8 @@ def create_listing(request):
         description = request.POST["description"]
         starting_bid = request.POST["starting_bid"]
         image_url = request.POST["image_url"]
+        category_id = request.POST.get("category")
+        
 
         # Validate data that user submit
         error_dict = {}
@@ -106,6 +110,10 @@ def create_listing(request):
             error_dict["missing_description"] = "Listing description is missing"
         if not starting_bid:
             error_dict["missing_starting_bid"] = "Listing starting bid is missing"
+
+        # Check category
+        if category_id:
+            category = Category.objects.get(id=category_id)
         
         # Validate starting bid
         try:
@@ -115,7 +123,7 @@ def create_listing(request):
 
         # Validate url of image_url, only validate when user input image url
         if image_url:
-            validate_url = URLValidator() # create urlvalidator object from urlvalidator class 
+            validate_url = URLValidator() # create validator_url object from urlvalidator class 
             try:
                 validate_url(image_url)
             except ValidationError:
@@ -129,12 +137,17 @@ def create_listing(request):
 
         # Create item object and add its to the item database
         owner = request.user
-        new_item = item(title=title, description=description, starting_bid=starting_bid, image_url=image_url, owner=owner)
+        new_item = item(title=title, description=description, categories=category, starting_bid=starting_bid, image_url=image_url, owner=owner)
         new_item.save()
 
         return HttpResponseRedirect(reverse("index"))
-                 
-    return render(request, "auctions/create_listing.html")
+
+    # Retrive all categories
+    categories = Category.objects.all()
+
+    return render(request, "auctions/create_listing.html", {
+        "categories": categories,
+    })
 
 def view_listing(request, id):
 
@@ -164,13 +177,14 @@ def view_listing(request, id):
     else:
         listing.comment = None
 
+    # Retrive category of listing
+    listing.category = Category.objects.get(id = listing.categories_id).category_name
+
     # On user request
     if request.method == "POST":
         
         # Add or remove watchlist
         if "watchlist" in request.POST:
-
-            print("hi")
 
             # User add listing item to their watchlist
             if request.POST["watchlist"] == "add_watchlist":
@@ -232,12 +246,16 @@ def view_listing(request, id):
                     
         elif "comment" in request.POST:
             
-            # Save new comment to database
-            new_comment = comment(comment=request.POST["comment"], item=listing, commenter=request.user)
-            new_comment.save()
+            # If comment is valid
+            user_commemt = request.POST["comment"]
+            if user_commemt:
 
-            # Update listing comment to render for user
-            listing.comment = comment.objects.filter(item_id=listing.id) 
+                # Save new comment to database
+                new_comment = comment(comment=user_commemt, item=listing, commenter=request.user)
+                new_comment.save()
+
+                # Update listing comment to render for user
+                listing.comment = comment.objects.filter(item_id=listing.id) 
 
         elif "close" in request.POST:
             if listing.is_owner and listing.is_active:
@@ -263,4 +281,64 @@ def view_listing(request, id):
     
     return render(request, "auctions/listing.html", {
         "listing": listing
+    })
+
+# Display all watchlist for user
+@login_required(login_url="login")
+def view_watchlist(request):
+
+    # Retrive all watchlists that user have
+    watchlists = watchlist.objects.filter(user = request.user)
+    
+    # Retrive all current bid of the item in watchlists
+    for listing in watchlists:
+        current_bid = bid.objects.filter(bid_item = listing.item).order_by("-bid").first()
+        if current_bid:
+            listing.item.current_bid = current_bid.bid
+        else:
+            listing.item.current_bid = None
+
+
+    return render(request, "auctions/watchlist.html", {
+        "watchlists": watchlists
+    })
+
+def category(request):
+    
+    # Retrive all categories from the table
+    categories = Category.objects.all()
+    
+    # Count number of listing in a category
+    for category in categories:
+        category.number_of_item = category.items.count()
+
+    return render(request, 'auctions/category.html', {
+        'categories': categories,
+    })
+
+def category_listing(request, id):
+    
+    # Retrive category
+    category = Category.objects.get(id = id)
+
+    # Retrive listing in that category
+    listings = item.objects.filter(categories = id)
+    
+    # Retrive current bid
+    for listing in listings:
+        
+        # Get highest bid
+        current_bid = bid.objects.filter(bid_item = listing.id).order_by("-bid").first()
+        if current_bid:
+            listing.current_bid = current_bid.bid
+        else:
+            listing.current_bid = None
+
+        # Get listing category
+        listing.category = Category.objects.get(id = listing.categories_id).category_name
+        
+
+    return render(request, "auctions/category_listing.html", {
+        "listings": listings,
+        "category": category,
     })

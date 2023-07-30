@@ -2,7 +2,6 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-    {{listings}}
     <div class="container-fuild mt-2">
         {% for listing in listings %}
             <!-- link to view-listing url along id of the listing as parameter to dynamic url -->
@@ -25,6 +24,7 @@
                         {% else %}
                             <h4> Starting Bid: ${{listing.starting_bid}}</h4>
                         {% endif %}
+                        <h4>Category: {{listing.category}}</h4>
                         <p class="text-justify text-truncate font-weight-light mt-4">
                             {{listing.description}}
                         </p>
