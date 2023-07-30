@@ -177,6 +177,9 @@ def view_listing(request, id):
     else:
         listing.comment = None
 
+    # Retrive category of listing
+    listing.category = Category.objects.get(id = listing.categories_id).category_name
+
     # On user request
     if request.method == "POST":
         
@@ -324,12 +327,17 @@ def category_listing(request, id):
     
     # Retrive current bid
     for listing in listings:
+        
+        # Get highest bid
         current_bid = bid.objects.filter(bid_item = listing.id).order_by("-bid").first()
         if current_bid:
             listing.current_bid = current_bid.bid
         else:
             listing.current_bid = None
 
+        # Get listing category
+        listing.category = Category.objects.get(id = listing.categories_id).category_name
+        
 
     return render(request, "auctions/category_listing.html", {
         "listings": listings,
