@@ -9,37 +9,40 @@
         </h2>
         {% if listings %}
             {% for listing in listings %}
-                <a class="listing_link" href="{% url 'view-listing' listing.id %}" >
-                    <div class="row border border-secondary mx-0 my-2 py-3">
-                        <div class="col-md-4">
-                            {% if listing.image_url %}
-                                <img class="img-fluid mx-auto d-block listing_img" src="{{listing.image_url}}" alt="Listing Photo">
-                            {% else %}
-                                <img src="{% static 'auctions/no-pictures.png' %}" class="img-fluid mx-auto d-block listing_img" alt="Listing does not have an photo">
-                                
-                                <p class="text-center">This listing doesn't have an image</p>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <h2 class="font-weight-bold">{{listing.title}}</h2>
-                            {% if listing.current_bid %}
-                                <h4>
-                                    Current Bid: ${{listing.current_bid}}
-                                </h4>
-                            {% else %}
-                                <h4>
-                                    Starting Bid: ${{listing.starting_bid}}
-                                </h4>
-                            {% endif %}
-                            <h4>
-                                Category: {{listing.category}}
-                            </h4>
-                            <p class="text-justify text-truncate font-weight-light mt-4">
-                                {{listing.description}}
-                            </p>
-                        </div>
-                    </div>
-                </a>
+                {% if listing.is_active %}
+
+                        <a class="listing_link" href="{% url 'view-listing' listing.id %}" >
+                            <div class="row border border-secondary mx-0 my-2 py-3">
+                                <div class="col-md-4">
+                                    {% if listing.image_url %}
+                                        <img class="img-fluid mx-auto d-block listing_img" src="{{listing.image_url}}" alt="Listing Photo">
+                                    {% else %}
+                                        <img src="{% static 'auctions/no-pictures.png' %}" class="img-fluid mx-auto d-block listing_img" alt="Listing does not have an photo">
+                                        
+                                        <p class="text-center">This listing doesn't have an image</p>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-8">
+                                    <h2 class="font-weight-bold">{{listing.title}}</h2>
+                                    {% if listing.current_bid %}
+                                        <h4>
+                                            Current Bid: ${{listing.current_bid}}
+                                        </h4>
+                                    {% else %}
+                                        <h4>
+                                            Starting Bid: ${{listing.starting_bid}}
+                                        </h4>
+                                    {% endif %}
+                                    <h4>
+                                        Category: {{listing.category}}
+                                    </h4>
+                                    <p class="text-justify text-truncate font-weight-light mt-4">
+                                        {{listing.description}}
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
             {% endfor %}
         {% else %}
             <h2>

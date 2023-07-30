@@ -222,18 +222,16 @@ def view_listing(request, id):
                 if bid_value < listing.starting_bid:
                     listing.error = "You Cannot Bid Less Than The Starting Bid"
                 else:
-                    listing.error = None                
+                    listing.error = None
 
                 # If the listing have other bid than starting bid
-                
                 if listing.current_bid:
                     if bid_value >= listing.starting_bid and bid_value <= listing.current_bid:
                         listing.error = "Your Bid Must Be Greater Than Current Bid"
-                else:
-                    listing.error = None
+                    else:
+                        listing.error = None
 
                 if not listing.error:
-                    
                     # Proceed with the bid
                     user_bid = bid(bid=bid_value, bid_item=listing, bid_user=request.user)
                     user_bid.save()
@@ -259,15 +257,18 @@ def view_listing(request, id):
 
         elif "close" in request.POST:
             if listing.is_owner and listing.is_active:
+                # If there are no one bid yet
+                if not listing.current_bid:
+                    listing.closing_error = "No one bid yet"
+                else:
+                    # Find the winner with the highest bid
+                    winner = current_bid.bid_user
+                    listing.winner = winner
 
-                # Find the winner with the highest bid
-                winner = current_bid.bid_user
-                listing.winner = winner
-
-                # Make the listing no longer active
-                listing.is_active = False
-                
-                listing.save()
+                    # Make the listing no longer active
+                    listing.is_active = False
+                    
+                    listing.save()
 
     # Retrive user id from request if they logged in
     user_id = request.user.id
@@ -310,8 +311,8 @@ def category(request):
     
     # Count number of listing in a category
     for category in categories:
-        category.number_of_item = category.items.count()
-
+        category.number_of_item = category.items.filter(is_active = True).count()
+        
     return render(request, 'auctions/category.html', {
         'categories': categories,
     })
@@ -341,4 +342,24 @@ def category_listing(request, id):
     return render(request, "auctions/category_listing.html", {
         "listings": listings,
         "category": category,
+    })
+
+def inactive_listing(request):
+
+    # Retrive all inactive listing
+    inactive_listings = item.objects.filter(is_active = False)
+
+    # Retrive highest bid
+    for listing in inactive_listings:
+        
+        highest_bid = bid.objects.filter(bid_item = listing.id).order_by("-bid").first()
+        if highest_bid:
+            listing.highest_bid = highest_bid.bid
+        else:
+            listing.highest_bid = None
+
+        listing.category = Category.objects.get(id = listing.categories_id).category_name
+
+    return render(request, "auctions/inactive_listing.html", {
+        "inactive_listings": inactive_listings
     })
