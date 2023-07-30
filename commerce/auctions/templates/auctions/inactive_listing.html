@@ -1,0 +1,38 @@
+{% extends 'auctions/layout.html' %}
+
+{% load static %}
+
+{% block body %}
+    <h2>Inactive Listing</h2>
+    {% if inactive_listings %}
+        {% for listing in inactive_listings %}
+            <a href="{% url 'view-listing' listing.id %}" class="listing_link">
+                <div class="row border border-secondary mx-0 my-2 py-3">
+                    <div class="col-md-4">
+                        {% if listing.image_url %}
+                            <img src="{{listing.image_url}}" alt="Listing Image" class="img-fluid mx-auto d-block listing_img">
+                        {% else %}
+                            <img src="{% static 'auctions/no-pictures.png' %}" alt="Listing does not have an photo" class="img-fluid mx-auto d-block listing_img">
+                            <p class="text-center">This listing doesn't have an image</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <h2 class="font-weight-bold">{{listing.title}}</h2>
+                        <h4>
+                            Highest Bid: ${{listing.highest_bid}}
+                        </h4>
+                        <h4>
+                            Category: {{listing.category}}
+                        </h4>
+                        <p class="text-justify text-truncate font-weight-light mt-4">
+                            {{listing.description}}
+                        </p>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    {% else %}
+        <h2>There is currently no inactive listing</h2>
+    {% endif %}
+
+{% endblock %}

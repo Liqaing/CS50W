@@ -41,7 +41,11 @@
 
                 </form>
             {% endif %}
-        
+            {% if listing.closing_error %}
+                <h5 class="text-danger">
+                    {{listing.closing_error}}
+                </h5>
+            {% endif %}
         </div>
         
         <div class="row my-4 mx-0 border border-secondary">
