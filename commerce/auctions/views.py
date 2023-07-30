@@ -309,9 +309,8 @@ def category(request):
     categories = Category.objects.all()
     
     # Count number of listing in a category
-    # counts = {}
-    # for category in categories:
-    #     print(category.items.all())
+    for category in categories:
+        category.number_of_item = category.items.count()
 
     return render(request, 'auctions/category.html', {
         'categories': categories,
